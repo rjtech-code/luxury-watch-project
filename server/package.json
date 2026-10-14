@@ -1,0 +1,43 @@
+{
+  "name": "time-luxe-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "build": "node --check src/server.js 2>/dev/null || echo 'API is plain JavaScript: no build step'",
+    "test": "vitest run",
+    "db:migrate": "node src/db/migrate.js",
+    "db:seed": "node src/db/seed.js",
+    "db:demo-enrich": "node src/db/demo-enrich.js",
+    "admin:create": "node src/db/create-admin.js",
+    "db:demo-reset": "node src/db/demo-enrich.js --reset",
+    "db:photos": "node src/db/photos.js",
+    "db:start": "node scripts/mongo-dev.mjs",
+    "db:stop": "node scripts/mongo-dev.mjs --stop"
+  },
+  "dependencies": {
+    "argon2": "^0.45.1",
+    "compression": "^1.8.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.7",
+    "express": "^4.22.3",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^6.21.0",
+    "morgan": "^1.12.1",
+    "multer": "^2.4.0",
+    "nodemailer": "^10.1.0",
+    "pino": "^10.4.0",
+    "pino-http": "^11.0.0",
+    "razorpay": "^2.9.8",
+    "zod": "^4.6.6"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.1",
+    "vitest": "^5.0.4"
+  }
+}

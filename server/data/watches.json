@@ -1,0 +1,420 @@
+{
+  "title": "Top Watch Companies and Their Products",
+  "note": "Compiled from general knowledge. Model lineups change often, so check each brand's official site for the current catalogue and prices.",
+  "companies": [
+    {
+      "name": "Rolex",
+      "country": "Switzerland",
+      "founded": 1905,
+      "segment": "Luxury",
+      "collections": [
+        {
+          "collection": "Submariner",
+          "type": "Dive watch",
+          "models": ["Submariner Date", "Submariner (no date)"]
+        },
+        {
+          "collection": "Datejust",
+          "type": "Dress / everyday",
+          "models": ["Datejust 31", "Datejust 36", "Datejust 41"]
+        },
+        {
+          "collection": "Daytona",
+          "type": "Chronograph",
+          "models": ["Cosmograph Daytona"]
+        },
+        {
+          "collection": "GMT-Master II",
+          "type": "Travel / dual time",
+          "models": ["GMT-Master II"]
+        },
+        {
+          "collection": "Day-Date",
+          "type": "Prestige",
+          "models": ["Day-Date 36", "Day-Date 40"]
+        }
+      ]
+    },
+    {
+      "name": "Patek Philippe",
+      "country": "Switzerland",
+      "founded": 1839,
+      "segment": "Ultra luxury",
+      "collections": [
+        {
+          "collection": "Nautilus",
+          "type": "Sports luxury",
+          "models": ["Nautilus 5711", "Nautilus 5811"]
+        },
+        {
+          "collection": "Aquanaut",
+          "type": "Sports luxury",
+          "models": ["Aquanaut 5167", "Aquanaut 5968"]
+        },
+        {
+          "collection": "Calatrava",
+          "type": "Dress watch",
+          "models": ["Calatrava 6119", "Calatrava 5196"]
+        },
+        {
+          "collection": "Grand Complications",
+          "type": "Complicated",
+          "models": ["Perpetual Calendar Chronograph 5270", "Minute Repeater 5178"]
+        }
+      ]
+    },
+    {
+      "name": "Audemars Piguet",
+      "country": "Switzerland",
+      "founded": 1875,
+      "segment": "Ultra luxury",
+      "collections": [
+        {
+          "collection": "Royal Oak",
+          "type": "Sports luxury",
+          "models": ["Royal Oak Selfwinding 15500", "Royal Oak Chronograph", "Royal Oak Jumbo Extra-Thin"]
+        },
+        {
+          "collection": "Royal Oak Offshore",
+          "type": "Sports luxury",
+          "models": ["Royal Oak Offshore Chronograph", "Royal Oak Offshore Diver"]
+        },
+        {
+          "collection": "Code 11.59",
+          "type": "Dress watch",
+          "models": ["Code 11.59 Selfwinding", "Code 11.59 Chronograph"]
+        }
+      ]
+    },
+    {
+      "name": "Omega",
+      "country": "Switzerland",
+      "founded": 1848,
+      "parent": "Swatch Group",
+      "segment": "Premium luxury",
+      "collections": [
+        {
+          "collection": "Speedmaster",
+          "type": "Chronograph",
+          "models": ["Speedmaster Moonwatch Professional", "Speedmaster Racing"]
+        },
+        {
+          "collection": "Seamaster",
+          "type": "Dive watch",
+          "models": ["Seamaster Diver 300M", "Seamaster Planet Ocean", "Seamaster Aqua Terra"]
+        },
+        {
+          "collection": "Constellation",
+          "type": "Dress watch",
+          "models": ["Constellation 41 mm", "Constellation Globemaster"]
+        },
+        {
+          "collection": "De Ville",
+          "type": "Dress watch",
+          "models": ["De Ville Prestige", "De Ville Trésor"]
+        }
+      ]
+    },
+    {
+      "name": "Cartier",
+      "country": "France / Switzerland",
+      "founded": 1847,
+      "parent": "Richemont",
+      "segment": "Luxury / jewellery",
+      "collections": [
+        {
+          "collection": "Tank",
+          "type": "Dress watch",
+          "models": ["Tank Must", "Tank Louis Cartier", "Tank Française"]
+        },
+        {
+          "collection": "Santos de Cartier",
+          "type": "Sports luxury",
+          "models": ["Santos de Cartier Medium", "Santos de Cartier Large"]
+        },
+        {
+          "collection": "Ballon Bleu",
+          "type": "Dress watch",
+          "models": ["Ballon Bleu de Cartier 33 mm", "Ballon Bleu de Cartier 42 mm"]
+        },
+        {
+          "collection": "Panthère",
+          "type": "Jewellery watch",
+          "models": ["Panthère de Cartier"]
+        }
+      ]
+    },
+    {
+      "name": "TAG Heuer",
+      "country": "Switzerland",
+      "founded": 1860,
+      "parent": "LVMH",
+      "segment": "Premium",
+      "collections": [
+        {
+          "collection": "Carrera",
+          "type": "Chronograph",
+          "models": ["Carrera Chronograph", "Carrera Three Hands"]
+        },
+        {
+          "collection": "Monaco",
+          "type": "Chronograph",
+          "models": ["Monaco Chronograph"]
+        },
+        {
+          "collection": "Aquaracer",
+          "type": "Dive watch",
+          "models": ["Aquaracer Professional 200", "Aquaracer Professional 300"]
+        },
+        {
+          "collection": "Formula 1",
+          "type": "Sports / quartz",
+          "models": ["Formula 1 Quartz"]
+        },
+        {
+          "collection": "Connected",
+          "type": "Smartwatch",
+          "models": ["TAG Heuer Connected Calibre E4"]
+        }
+      ]
+    },
+    {
+      "name": "Breitling",
+      "country": "Switzerland",
+      "founded": 1884,
+      "segment": "Premium luxury",
+      "collections": [
+        {
+          "collection": "Navitimer",
+          "type": "Pilot chronograph",
+          "models": ["Navitimer B01 Chronograph 43", "Navitimer Automatic 41"]
+        },
+        {
+          "collection": "Superocean",
+          "type": "Dive watch",
+          "models": ["Superocean Automatic 42", "Superocean Heritage"]
+        },
+        {
+          "collection": "Chronomat",
+          "type": "Sports chronograph",
+          "models": ["Chronomat B01 42"]
+        },
+        {
+          "collection": "Avenger",
+          "type": "Pilot watch",
+          "models": ["Avenger Automatic 42"]
+        }
+      ]
+    },
+    {
+      "name": "Longines",
+      "country": "Switzerland",
+      "founded": 1832,
+      "parent": "Swatch Group",
+      "segment": "Mid-premium",
+      "collections": [
+        {
+          "collection": "HydroConquest",
+          "type": "Dive watch",
+          "models": ["HydroConquest 41 mm", "HydroConquest 43 mm"]
+        },
+        {
+          "collection": "Master Collection",
+          "type": "Dress watch",
+          "models": ["Master Collection Moon Phase", "Master Collection Annual Calendar"]
+        },
+        {
+          "collection": "Spirit",
+          "type": "Pilot watch",
+          "models": ["Spirit 40 mm", "Spirit Zulu Time"]
+        },
+        {
+          "collection": "DolceVita",
+          "type": "Ladies dress watch",
+          "models": ["DolceVita Quartz"]
+        }
+      ]
+    },
+    {
+      "name": "Tissot",
+      "country": "Switzerland",
+      "founded": 1853,
+      "parent": "Swatch Group",
+      "segment": "Affordable Swiss",
+      "collections": [
+        {
+          "collection": "PRX",
+          "type": "Sports / integrated bracelet",
+          "models": ["PRX Quartz 40 mm", "PRX Powermatic 80"]
+        },
+        {
+          "collection": "Gentleman",
+          "type": "Dress watch",
+          "models": ["Gentleman Powermatic 80 Silicium"]
+        },
+        {
+          "collection": "Seastar",
+          "type": "Dive watch",
+          "models": ["Seastar 1000 Powermatic 80"]
+        },
+        {
+          "collection": "T-Touch",
+          "type": "Smart / sensor watch",
+          "models": ["T-Touch Connect Solar", "T-Touch Expert Solar II"]
+        },
+        {
+          "collection": "Le Locle",
+          "type": "Dress watch",
+          "models": ["Le Locle Powermatic 80"]
+        }
+      ]
+    },
+    {
+      "name": "Seiko",
+      "country": "Japan",
+      "founded": 1881,
+      "parent": "Seiko Group",
+      "segment": "Mass to premium",
+      "collections": [
+        {
+          "collection": "Seiko 5 Sports",
+          "type": "Automatic everyday",
+          "models": ["SRPD series", "SRPE series"]
+        },
+        {
+          "collection": "Prospex",
+          "type": "Dive watch",
+          "models": ["Turtle", "Samurai", "Monster"]
+        },
+        {
+          "collection": "Presage",
+          "type": "Dress watch",
+          "models": ["Cocktail Time", "Style60"]
+        },
+        {
+          "collection": "Astron",
+          "type": "GPS solar",
+          "models": ["Astron GPS Solar"]
+        },
+        {
+          "collection": "Grand Seiko",
+          "type": "Luxury",
+          "models": ["Snowflake SBGA211", "Spring Drive SBGA"]
+        }
+      ]
+    },
+    {
+      "name": "Casio",
+      "country": "Japan",
+      "founded": 1946,
+      "segment": "Mass market / digital",
+      "collections": [
+        {
+          "collection": "G-SHOCK",
+          "type": "Rugged digital / analog",
+          "models": ["GA-2100 (CasiOak)", "DW-5600", "GW-M5610", "Mudmaster"]
+        },
+        {
+          "collection": "Edifice",
+          "type": "Sports chronograph",
+          "models": ["EFR series", "ECB series"]
+        },
+        {
+          "collection": "Baby-G",
+          "type": "Rugged ladies watch",
+          "models": ["BA-110", "BGA series"]
+        },
+        {
+          "collection": "Classic Digital",
+          "type": "Retro digital",
+          "models": ["F-91W", "A168W", "CA-53W"]
+        }
+      ]
+    },
+    {
+      "name": "Citizen",
+      "country": "Japan",
+      "founded": 1918,
+      "segment": "Mass to premium",
+      "collections": [
+        {
+          "collection": "Eco-Drive",
+          "type": "Light-powered",
+          "models": ["Eco-Drive Promaster", "Eco-Drive Chandler"]
+        },
+        {
+          "collection": "Promaster",
+          "type": "Dive / pilot",
+          "models": ["Promaster Dive Automatic", "Promaster Navihawk"]
+        },
+        {
+          "collection": "Tsuyosa",
+          "type": "Automatic",
+          "models": ["Tsuyosa NJ0150"]
+        },
+        {
+          "collection": "The Citizen",
+          "type": "Premium",
+          "models": ["The Citizen Eco-Drive"]
+        }
+      ]
+    },
+    {
+      "name": "Titan",
+      "country": "India",
+      "founded": 1984,
+      "parent": "Tata Group",
+      "segment": "Mass market",
+      "collections": [
+        {
+          "collection": "Edge",
+          "type": "Slim dress watch",
+          "models": ["Edge Ceramic", "Edge Metal"]
+        },
+        {
+          "collection": "Raga",
+          "type": "Ladies watch",
+          "models": ["Raga Viva", "Raga Delight"]
+        },
+        {
+          "collection": "Nebula",
+          "type": "Luxury (gold)",
+          "models": ["Nebula Gold"]
+        },
+        {
+          "collection": "Octane",
+          "type": "Sports watch",
+          "models": ["Octane Chronograph"]
+        },
+        {
+          "collection": "Smart",
+          "type": "Smartwatch",
+          "models": ["Titan Smart", "Titan Smart Pro"]
+        }
+      ]
+    },
+    {
+      "name": "Apple",
+      "country": "United States",
+      "founded": 1976,
+      "segment": "Smartwatch",
+      "collections": [
+        {
+          "collection": "Apple Watch Series",
+          "type": "Smartwatch",
+          "models": ["Apple Watch Series 10", "Apple Watch Series 11"]
+        },
+        {
+          "collection": "Apple Watch Ultra",
+          "type": "Rugged smartwatch",
+          "models": ["Apple Watch Ultra 2", "Apple Watch Ultra 3"]
+        },
+        {
+          "collection": "Apple Watch SE",
+          "type": "Entry smartwatch",
+          "models": ["Apple Watch SE (2nd generation)", "Apple Watch SE 3"]
+        }
+      ]
+    }
+  ]
+}
