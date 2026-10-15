@@ -1,17 +1,25 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { cx, dateFmt, plural } from '@/lib/format';
-import { useBrands, useHome, useSite } from '@/lib/hooks';
+import { useBrands, useCategories, useCollections, useHome, useSite } from '@/lib/hooks';
 import { OCCASIONS } from '@/lib/nav';
 import { Seo } from '@/lib/seo';
 import { Icon, Skeleton, Stars } from '@/components/ui';
 import { LiveDial } from '@/components/LiveDial';
 import { NewsletterForm } from '@/components/Newsletter';
-import { WatchArt } from '@/components/WatchArt';
-import { MODEL_LIBRARY } from '@/lib/models3d';
+import { ProductCard, ProductGridSkeleton } from '@/components/ProductCard';
+import { WatchArt, artKind } from '@/components/WatchArt';
+import { MODEL_LIBRARY, representativeModel } from '@/lib/models3d';
+import { useQuery } from '@tanstack/react-query';
+import { get } from '@/lib/api';
 import { BRAND_IMAGES } from '@/lib/brandImages';
 
 const HeroWatch = lazy(() => import('@/components/HeroWatch'));
+const Viewer3D = lazy(() => import('@/components/Viewer3D'));
+
+const FEATURED_COLLECTIONS = ['rolex-submariner', 'patek-philippe-nautilus', 'audemars-piguet-royal-oak', 'omega-speedmaster', 'cartier-tank', 'tag-heuer-carrera', 'omega-seamaster', 'seiko-prospex'];
+/** Watch shown in the 3D section, in order of preference; the first one with a photo is used. */
+const SPOTLIGHT_PICKS = ['rolex-submariner-date', 'omega-speedmaster-moonwatch-professional', 'rolex-gmt-master-ii', 'patek-philippe-nautilus-5711', 'audemars-piguet-royal-oak-selfwinding-15500', 'rolex-cosmograph-daytona'];
 const HERO_MODEL = MODEL_LIBRARY.find((m) => m.id === 'chronograph-gold');
 
 function useInView(margin = '200px') {
@@ -109,6 +117,134 @@ function BrandMarquee({ brands }) {
   return (
     <section aria-label="Brands" className="overflow-hidden border-b rule bg-coal py-6">
       <div className="marquee">{row}<div aria-hidden="true" className="flex">{row}</div></div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- collections
+
+function CollectionCard({ c, big }) {
+  return (
+    <Link to={`/collections/${c.slug}`} className={cx('group relative flex flex-col justify-end overflow-hidden bg-coal ring-1 ring-smoke transition-shadow duration-500 hover:ring-champagne/50', big ? 'min-h-[26rem] lg:row-span-2' : 'min-h-[16rem]')}>
+      <div className={cx('absolute inset-0', !c.imageUrl && 'stage')}>
+        {c.imageUrl ? (
+          <img src={c.imageUrl} alt="" loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" />
+        ) : (
+          <WatchArt kind={artKind({ typeLabel: c.typeLabel })} seed={c.slug} className="absolute inset-x-0 top-0 mx-auto h-3/4 w-3/4 opacity-80" label="" />
+        )}
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-ink/5" />
+      <div className="relative p-6">
+        <p className="eyebrow !text-[.66rem]">{c.brandName}</p>
+        <h3 className={cx('mt-1.5 leading-tight', big ? 'text-[2.2rem]' : 'text-[1.5rem]')}>{c.name}</h3>
+        <p className="muted mt-1 flex items-center gap-2 text-[.8rem]">{plural(c.productCount, 'reference', 'references')}<Icon name="chevronR" size={13} className="text-champagne transition-transform group-hover:translate-x-1" /></p>
+      </div>
+    </Link>
+  );
+}
+
+function Collections() {
+  const { data } = useCollections();
+  const all = (data?.items ?? []).filter((c) => c.productCount > 0);
+  const picked = FEATURED_COLLECTIONS.map((s) => all.find((c) => c.slug === s)).filter(Boolean);
+  const items = [...picked, ...all.filter((c) => !picked.includes(c) && c.imageUrl)].slice(0, 7);
+  if (!items.length) return null;
+  return (
+    <Section>
+      <Head eyebrow="Iconic collections" title="Lines that defined their eras" action={<More to="/collections">All collections</More>} />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
+        {items.map((c, i) => <CollectionCard key={c.slug} c={c} big={i === 0} />)}
+      </div>
+    </Section>
+  );
+}
+
+// ---------------------------------------------------------------- curated product tabs
+
+function Selection({ home, loading }) {
+  const tabs = [
+    ['bestSellers', 'Best sellers', '/best-sellers'],
+    ['newArrivals', 'New arrivals', '/new-arrivals'],
+    ['men', 'For him', '/mens-watches'],
+    ['women', 'For her', '/womens-watches'],
+    ['limited', 'Limited editions', '/limited-editions'],
+  ].filter(([k]) => loading || home?.[k]?.length);
+  const [tab, setTab] = useState('bestSellers');
+  const current = tabs.find(([k]) => k === tab) ?? tabs[0];
+  if (!current) return null;
+  const items = home?.[current[0]] ?? [];
+  return (
+    <Section className="bg-gradient-to-b from-ink to-coal">
+      <Head eyebrow="The selection" title="Chosen for you" center />
+      <div role="tablist" aria-label="Product selection" className="mx-auto mb-10 flex max-w-full gap-1 overflow-x-auto border-b rule scrollbar-thin sm:w-fit">
+        {tabs.map(([k, label]) => (
+          <button key={k} role="tab" aria-selected={current[0] === k} onClick={() => setTab(k)} className={cx('-mb-px whitespace-nowrap border-b-2 px-5 py-3 text-[.8rem] font-semibold uppercase tracking-[.14em] transition-colors', current[0] === k ? 'border-champagne text-champagne' : 'muted border-transparent hover:text-ivory')}>{label}</button>
+        ))}
+      </div>
+      {loading ? <ProductGridSkeleton n={4} /> : (
+        <div key={current[0]} className="anim-fade grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+          {items.slice(0, 8).map((p) => <ProductCard key={p.id} product={p} />)}
+        </div>
+      )}
+      <div className="mt-12 text-center"><Link to={current[2]} className="btn btn-line">View all {current[1].toLowerCase()}</Link></div>
+    </Section>
+  );
+}
+
+// ---------------------------------------------------------------- categories
+
+function Categories() {
+  const { data } = useCategories();
+  const items = (data?.items ?? []).filter((c) => c.productCount > 0);
+  if (!items.length) return null;
+  return (
+    <Section>
+      <Head eyebrow="Shop by category" title="Find your kind of watch" action={<More to="/shop">Shop all</More>} />
+      <ul className="-mx-5 flex snap-x gap-6 overflow-x-auto px-5 pb-4 scrollbar-thin md:mx-0 md:grid md:grid-cols-4 md:gap-8 md:overflow-visible md:px-0 lg:grid-cols-6">
+        {items.slice(0, 12).map((c) => (
+          <li key={c.slug} className="w-36 shrink-0 snap-start md:w-auto">
+            <Link to={`/category/${c.slug}`} className="group block text-center">
+              <span className="stage relative mx-auto block aspect-square w-full overflow-hidden rounded-full ring-1 ring-smoke transition-[box-shadow] duration-500 group-hover:ring-champagne/70">
+                {c.imageUrl
+                  ? <img src={c.imageUrl} alt="" loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  : <WatchArt kind={artKind({ typeLabel: c.slug.replace(/-/g, ' ') })} seed={c.slug} className="absolute inset-[18%] size-[64%]" label="" />}
+              </span>
+              <span className="mt-4 block font-display text-[1.08rem] leading-tight group-hover:text-champagne">{c.name}</span>
+              <span className="muted text-[.76rem]">{plural(c.productCount, 'watch', 'watches')}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  );
+}
+
+// ---------------------------------------------------------------- 3D
+
+function Interactive3D({ product }) {
+  const [ref, seen] = useInView('300px');
+  return (
+    <section className="relative overflow-hidden border-y rule bg-[radial-gradient(70%_80%_at_70%_50%,#1f1b16,#0c0b0a)] py-16 md:py-24">
+      <div ref={ref} className="wrap grid items-center gap-10 lg:grid-cols-[.75fr_1.25fr]">
+        <div>
+          <p className="eyebrow">Interactive 3D</p>
+          <h2 className="mt-3 text-[clamp(2rem,3.6vw,3rem)]">Turn it over in your hands</h2>
+          <p className="muted mt-5 max-w-md leading-relaxed">Rotate, zoom and look at the case, the crown and the caseback. Watches without their own model show a realistic representative model of the same style, always labelled.</p>
+          <ul className="mt-7 space-y-2.5 text-[.92rem]">
+            {['Drag to rotate, pinch or scroll to zoom', 'Front, side, crown and back views', 'Full screen, and AR on Android'].map((t) => (
+              <li key={t} className="flex items-center gap-3"><span className="size-1.5 rotate-45 bg-champagne" />{t}</li>
+            ))}
+          </ul>
+          <Link to="/showcase" className="btn btn-gold mt-9">Open the 3D showcase</Link>
+        </div>
+        <div className="relative aspect-[4/3] ring-1 ring-smoke">
+          {seen ? (
+            <Suspense fallback={<Skeleton className="size-full" />}>
+              <Viewer3D modelUrl={product?.modelUrl} representative={representativeModel(product)} name={product?.name ?? 'Generic watch'} className="size-full" />
+            </Suspense>
+          ) : <Skeleton className="size-full" />}
+        </div>
+      </div>
     </section>
   );
 }
@@ -345,15 +481,21 @@ function PromoBanners({ banners }) {
 
 export default function Home() {
   const { data: site } = useSite();
-  const { data: home } = useHome();
+  const { data: home, isLoading } = useHome();
   const brands = useBrands();
+  const { data: picks } = useQuery({ queryKey: ['spotlight-picks'], queryFn: () => get('/api/catalog/by-slugs', { slugs: SPOTLIGHT_PICKS.join(',') }), staleTime: 5 * 60_000 });
   const stats = brands.data ? { brands: brands.data.items.length, watches: brands.data.items.reduce((n, b) => n + b.productCount, 0) } : null;
+  const spotlight = [...(picks?.items ?? []), ...(home?.featured ?? []), ...(home?.bestSellers ?? [])].find((p) => p.image) ?? home?.bestSellers?.[0];
   return (
     <>
-      <Seo title={null} description="Luxury and everyday watches from the houses we carry. Browse by brand, collection and occasion, and turn a watch over in 3D." path="/" />
+      <Seo title={null} description="Browse luxury and everyday watches by brand, collection and occasion. Compare models, save favourites and check out securely." path="/" />
       <Hero site={site} stats={stats} />
       <BrandMarquee brands={brands.data?.items} />
       <PromoBanners banners={home?.banners} />
+      <Collections />
+      <Selection home={home} loading={isLoading} />
+      <Categories />
+      <Interactive3D product={spotlight} />
       <BrandShowcase brands={brands.data?.items} loading={brands.isLoading} />
       <Occasions />
       <ArtOfChoosing />
