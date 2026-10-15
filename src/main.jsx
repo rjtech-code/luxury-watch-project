@@ -11,14 +11,15 @@ const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, ref
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ErrorBoundary>
-      <HelmetProvider>
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          {/* Inside the providers, so the error screen itself can use them. */}
+          <ErrorBoundary>
             <App />
-          </BrowserRouter>
-        </QueryClientProvider>
-      </HelmetProvider>
-    </ErrorBoundary>
+          </ErrorBoundary>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </HelmetProvider>
   </StrictMode>,
 );

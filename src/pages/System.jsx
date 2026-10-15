@@ -55,6 +55,8 @@ export class ErrorBoundary extends Component {
   componentDidCatch(error) { if (import.meta.env.DEV) console.error(error); }
   render() {
     if (!this.state.error) return this.props.children;
-    return <ErrorScreen reset={() => { this.setState({ error: null }); }} />;
+    // A page file that failed to download (server restarted, new deploy) only comes back with a full reload.
+    const chunkFailed = /dynamically imported module|Importing a module script failed|Loading chunk/i.test(this.state.error?.message ?? '');
+    return <ErrorScreen reset={() => (chunkFailed ? window.location.reload() : this.setState({ error: null }))} />;
   }
 }
