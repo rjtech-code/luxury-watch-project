@@ -29,7 +29,7 @@ async function getOrCreateCart(req, res) {
   }
   const raw = randomToken(32);
   const c = await db.carts.insert({ guestTokenHash: sha256(raw) });
-  res.cookie(GUEST_COOKIE, raw, { httpOnly: true, secure: config.isProd, sameSite: 'lax', path: '/', maxAge: 60 * 86400_000 });
+  res.cookie(GUEST_COOKIE, raw, { httpOnly: true, secure: config.isProd || config.crossSiteCookies, sameSite: config.crossSiteCookies ? 'none' : 'lax', path: '/', maxAge: 60 * 86400_000 });
   return c;
 }
 

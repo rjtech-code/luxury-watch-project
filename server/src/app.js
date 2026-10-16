@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -19,12 +21,17 @@ import { publicRouter } from './routes/public.js';
 import { adminSalesRouter } from './routes/admin-sales.js';
 import { adminManageRouter, UPLOAD_DIR } from './routes/admin-manage.js';
 
+/** Freely licensed catalogue photos kept in the repository (server/data/photos), served as /uploads/catalog. */
+const CATALOG_PHOTOS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../data/photos');
+
 export const logger = pino({ level: config.isTest ? 'silent' : process.env.LOG_LEVEL ?? 'info', redact: ['req.headers.cookie', 'req.headers.authorization'] });
 
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
-  app.set('trust proxy', process.env.TRUST_PROXY ? Number(process.env.TRUST_PROXY) || process.env.TRUST_PROXY : false);
+  // Behind Vercel's (or any) proxy the client IP is in X-Forwarded-For; rate limits need it.
+  const trust = process.env.TRUST_PROXY ?? (process.env.VERCEL ? '1' : '');
+  app.set('trust proxy', trust ? Number(trust) || trust : false);
 
   app.use(pinoHttp({ logger, autoLogging: { ignore: (req) => req.url === '/api/health' } }));
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
@@ -46,6 +53,7 @@ export function createApp() {
     }
   });
 
+  app.use('/uploads/catalog', express.static(CATALOG_PHOTOS, { maxAge: '30d', index: false, dotfiles: 'deny', fallthrough: true }));
   app.use(
     '/uploads',
     express.static(UPLOAD_DIR, { maxAge: '30d', immutable: true, index: false, dotfiles: 'deny', setHeaders: (res) => res.set('X-Content-Type-Options', 'nosniff') }),

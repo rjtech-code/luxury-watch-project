@@ -16,6 +16,8 @@ if (jwtSecret.length < 32) {
 export const config = {
   isProd,
   isTest: process.env.NODE_ENV === 'test',
+  /** Only when the website and API are on different domains (not recommended): cookies must then be SameSite=None. */
+  crossSiteCookies: process.env.CROSS_SITE_COOKIES === 'true',
   port: Number(process.env.PORT ?? 4000),
   webOrigin: process.env.WEB_ORIGIN ?? 'http://localhost:5173',
   siteUrl: (process.env.SITE_URL ?? process.env.WEB_ORIGIN ?? 'http://localhost:5173').replace(/\/$/, ''),

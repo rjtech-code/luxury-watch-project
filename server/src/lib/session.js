@@ -8,8 +8,8 @@ const REFRESH_COOKIE = 'lw_rt';
 
 const cookieBase = {
   httpOnly: true,
-  secure: config.isProd,
-  sameSite: 'lax',
+  secure: config.isProd || config.crossSiteCookies,
+  sameSite: config.crossSiteCookies ? 'none' : 'lax',
   path: '/',
 };
 

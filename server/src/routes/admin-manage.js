@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import multer from 'multer';
 import { db, ping, withTx } from '../db/client.js';
@@ -24,8 +25,14 @@ const idParam = z.object({ id: z.string().uuid() });
 const page = z.coerce.number().int().min(1).default(1);
 
 // ------------------------------------------------------------------ uploads
-export const UPLOAD_DIR = path.resolve(process.env.UPLOAD_DIR ?? path.join(process.cwd(), 'uploads'));
-fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+// On Vercel the app folder is read-only, so admin uploads go to /tmp there (temporary: use object storage
+// such as Vercel Blob or S3 for uploads that must last). Catalogue photos are served from server/data/photos.
+export const UPLOAD_DIR = path.resolve(process.env.UPLOAD_DIR ?? (process.env.VERCEL ? path.join(os.tmpdir(), 'uploads') : path.join(process.cwd(), 'uploads')));
+try {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+} catch {
+  /* read-only disk: uploads will fail with an error, the rest of the API still works */
+}
 
 const SIGNATURES = [
   { ext: '.jpg', test: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },

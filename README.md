@@ -49,6 +49,30 @@ npm run dev                                 # website http://localhost:5173, API
 
 Create the first **SUPER_ADMIN** only with the `admin:create` command. There is no signup route or API field that can create one.
 
+## Deploying to Vercel
+
+The website and the API deploy together as **one Vercel project**, on one domain. That keeps the login cookies first-party (browsers block cookies from a different domain) and lets `/uploads` work.
+
+- `vercel.json` builds the website into `dist/` and sends `/api/*`, `/uploads/*`, `/sitemap.xml` and `/robots.txt` to `api/index.js`, which runs the Express API as a serverless function.
+- Catalogue photos are served from `server/data/photos` (in the repository), so they work without any upload step.
+
+Steps:
+1. Import the GitHub repository in Vercel. Leave the root directory as the repository root; the framework is detected as Vite.
+2. Add these environment variables (Project, Settings, Environment Variables):
+   | Variable | Value |
+   |---|---|
+   | `MONGODB_URI` | Your Atlas URI, without `replicaSet=...` |
+   | `JWT_SECRET` | A long random string (at least 32 characters) |
+   | `NODE_ENV` | `production` |
+   | `WEB_ORIGIN` and `SITE_URL` | Your site address, e.g. `https://your-app.vercel.app` |
+   Do **not** set `VITE_API_URL` (the website and API share the domain).
+3. In MongoDB Atlas, Network Access, allow `0.0.0.0/0` (Vercel has no fixed IP addresses).
+4. Deploy. Seed the database once from your computer (`npm run db:seed`, `npm run db:photos`, `npm run admin:create`) with `MONGODB_URI` pointing at Atlas.
+
+Limits on Vercel: files uploaded in the admin are stored in `/tmp` and disappear; use object storage (Vercel Blob, S3) for permanent uploads. The 5-minute job that releases stock from unpaid online orders only runs on a long-running server (`npm start`), not on Vercel.
+
+If the API must live on another domain instead, set `CROSS_SITE_COOKIES=true` on the server and `VITE_API_URL` on the website; browsers that block third-party cookies (Safari, some Chrome settings) will still refuse to stay signed in, so one domain is strongly recommended.
+
 ## Environment variables (`server/.env`)
 
 | Variable | Purpose |
